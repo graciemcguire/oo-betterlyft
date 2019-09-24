@@ -5,6 +5,7 @@ class Passenger
 
   def initialize(name)
     @name = name
+
     @@all << self
   end
 
@@ -13,62 +14,23 @@ class Passenger
   end
 
   def rides
-    Ride.all.select { |ride| ride.passenger == self }
+    Ride.all.select { | ride | ride.passenger == self }
   end
-#
-#   def drivers
-#     ride = Ride.all
-#     myArray = []
-#     count = 0
-#     while count < ride.size
-#       if (ride[count].passenger == self)
-#         myArray.push(ride[count].driver)
-#       end
-#       count = count + 1
-#     end
-#     myArray
-#   end
-# end
-
-  # def drivers
-  #   Ride.all.select do |ride|
-  #     if ride.passenger == self
-  #       ride.driver
-  #     end
-  #   end
-  # end
 
   def drivers
-    rides.map { |ride| ride.driver }
+    rides.map { | ride | ride.driver }
   end
-
-  # def total_distance
-  #   sum = 0
-  #   rides.map { |ride| sum += ride.distance }
-  #   sum
-  # end
 
   def total_distance
-    rides.map { |ride| ride.distance }.sum
+    rides.reduce(0) { | sum, ride | sum + ride.distance }.to_f
   end
-
-  # def self.premium_members
-  #   myArray = []
-  #   count = 0
-  #   while count < @@all.size
-  #     current_passenger = @@all[count]
-  #     if current_passenger.total_distance > 100
-  #       myArray.push(current_passenger)
-  #     end
-  #     count = count + 1
-  #   end
-  #   myArray
-  # end
 
   def self.premium_members
-    @@all.select { |passenger| passenger.total_distance > 100 }
+    #we want to iterate through all of the
+    #rides and find out who rode over 100 miles
+    # lots_of_rides = Ride.all.select { | ride | ride.distance > 20 }
+    # lots_of_rides.map { | ride | ride.passenger.name }.uniq
+    self.all.select { | passenger |  passenger.total_distance > 100 }
   end
-
-
 
 end
