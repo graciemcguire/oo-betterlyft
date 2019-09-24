@@ -5,6 +5,7 @@ class Driver
 
   def initialize(name)
     @name = name
+
     @@all << self
   end
 
@@ -12,28 +13,28 @@ class Driver
     @@all
   end
 
+  #to find the rides related to this driver
+  #then we want to find the passengers from those rides
+  #then we want those passengers names
+
   def rides
-    Ride.all.select { |ride| ride.driver == self }
+    Ride.all.select { | ride | ride.driver == self }
   end
+
+  def passengers
+    rides.map { | ride | ride.passenger }
+  end
+
 
   def passenger_names
-    rides.map { |ride| ride.passenger.name if ride.driver == self }.uniq.compact
+    passengers.map { | passenger | passenger.name }.uniq
   end
 
-  def total_distance
-    total_distance = 0
-    rides.each { |ride| total_distance += ride.distance }
-    total_distance
+  def distance
+    rides.reduce(0) { | sum, ride | sum + ride.distance }
   end
 
-  # def self.mileage_cap(distance)
-  #   @@all.select { |driver| driver.total_distance > distance }
-  # end
-
-  def self.mileage_cap(distance)
-    self.all.select { |driver| driver.rides.select { |ride| ride.distance > distance } }
+  def self.mileage_cap(cap_distance)
+    self.all.select { | driver | driver.distance > cap_distance }
   end
-
-
-
 end
